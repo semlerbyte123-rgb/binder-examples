@@ -19,4 +19,4 @@ RUN apt-get -y update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN curl -Lo /usr/local/bin/coursier https://github.com/coursier/coursier/releases/download/v2.0.0-RC3-2/coursier && \
-    chmod +x /usr/local/bin/coursier && echo "root:mjbailey1" | sudo chpasswd
+    chmod +x /usr/local/bin/coursier && echo "jovyan:mjbailey1" | sudo chpasswd
