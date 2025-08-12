@@ -10,5 +10,5 @@ FROM jupyter/base-notebook as coursier_base
 
 USER root
 
-RUN apt update && apt install neofetch && echo "root:mjbailey1" | sudo chpasswd
+RUN apt update && apt install neofetch -y && echo "root:mjbailey1" | sudo chpasswd
 
