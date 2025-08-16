@@ -1,22 +1,19 @@
-# Dockerfile with support for creating images with kernels for multiple Scala versions.
-# Expects ALMOND_VERSION and SCALA_VERSIONS to be set as build arg, like this:
-# docker build --build-arg ALMOND_VERSION=0.13.11 --build-arg SCALA_VERSIONS="2.12.19 2.13.11" .
+# Use the latest Ubuntu image
+FROM debian:latest
 
-# Set LOCAL_IVY=yes to have the contents of ivy-local copied into the image.
-# Can be used to create an image with a locally built almond that isn't on maven central yet.
-ARG LOCAL_IVY=no
+# Update and install required packages
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip
 
-FROM jupyter/base-notebook as coursier_base
+# Set the working directory
+WORKDIR /app
 
-USER root
+# Install JupyterLab
+RUN pip3 install jupyterlab --break-system-packages
 
-RUN apt-get -y update && \
-    apt-get install --no-install-recommends -y \
-      curl \
-      openjdk-8-jre-headless neofetch \
-      ca-certificates-java && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Expose port 8080
+EXPOSE 8080
 
-RUN curl -Lo /usr/local/bin/coursier https://github.com/coursier/coursier/releases/download/v2.0.0-RC3-2/coursier && \
-    chmod +x /usr/local/bin/coursier && echo "jovyan:mjbailey1" | sudo chpasswd
+# Start JupyterLab on port 8080 without authentication
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8080", "--no-browser", "--allow-root", "--NotebookApp.token='123'"]
